@@ -26,7 +26,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ role }) => {
   const [assignedUsers, setAssignedUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [statusLoading, setStatusLoading] = useState<boolean>(false);
+  const [_, setStatusLoading] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
