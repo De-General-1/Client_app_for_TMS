@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //import Sidebar from "../components/Sidebar"; // assuming Sidebar is a reusable component
 import LoadingSpinner from "../components/LoadingSpinner"; // a loading spinner component
 
@@ -114,7 +114,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ role }) => {
                     className="p-6 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-200 ease-in-out"
                   >
                     <h3 className="text-xl font-semibold text-gray-800">
-                      {task.title}
+                      <Link to={`/task-details/${task.id}`}>{task.title}</Link>
                     </h3>
                     <p className="text-sm text-gray-500 mt-2">
                       {task.description}

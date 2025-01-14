@@ -6,6 +6,7 @@ import MemberDashboard from "./pages/MemberDashboard";
 import CreateTask from "./pages/CreateTask";
 import Layout from "./components/Layout";
 import HomePage from "./pages/HomePage";
+import TaskDetails from "./pages/TaskDetail";
 
 const App: React.FC = () => {
   const auth = useAuth();
@@ -57,6 +58,10 @@ const App: React.FC = () => {
         {
           path: "/create-task",
           element: role === "Admin" ? <CreateTask /> : <div>Access Denied</div>,
+        },
+        {
+          path: "/task-details/:taskId",
+          element: <TaskDetails role={role} />,
         },
       ],
     },

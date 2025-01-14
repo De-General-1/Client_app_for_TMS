@@ -1,6 +1,7 @@
-import React from "react";
-import { useLocation } from "react-router-dom"; // Import useLocation
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import task_logo from "../assets/images/task_logo.png";
+import { useAuth } from "react-oidc-context";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -8,11 +9,28 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
-  const location = useLocation(); // Get the current location
+  const auth = useAuth();
+  const [role, setRole] = useState<string | null>(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (
+      auth.isAuthenticated &&
+      Array.isArray(auth.user?.profile["cognito:groups"])
+    ) {
+      const groups = auth.user?.profile["cognito:groups"] as string[];
+
+      if (groups.includes("Admin")) {
+        setRole("Admin");
+      } else if (groups.includes("Team_members")) {
+        setRole("Team_member");
+      }
+    }
+  }, [auth]);
 
   // Hide the sidebar on the `/` route (or any other route you specify)
   if (location.pathname === "/") {
-    return null; // Don't render the sidebar
+    return null;
   }
 
   return (
@@ -32,31 +50,32 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
           </div>
           <div className="p-4">
             <ul className="space-y-1">
-              {/* Menu Item 1 */}
               <li>
-                <a
-                  href="#"
-                  className="flex bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
+                <Link
+                  to={`${
+                    role === "Admin" ? "/admin-dashboard" : "member-dashboard"
+                  }`}
+                  className="flex items-center bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    fill="currentColor"
-                    className="text-lg"
-                    viewBox="0 0 16 16"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    className="text-lg" // Added class for styling instead of inline style
                   >
-                    <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z" />
+                    <path d="M12.74 2.32a1 1 0 0 0-1.48 0l-9 10A1 1 0 0 0 3 14h2v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7h2a1 1 0 0 0 1-1 1 1 0 0 0-.26-.68z"></path>
                   </svg>
                   <span className={`${collapsed ? "hidden" : "flex ml-4"}`}>
-                    Plan
+                    Dashboard
                   </span>
-                </a>
+                </Link>
               </li>
-              {/* Menu Item 2 */}
               <li>
-                <a
-                  href="#"
+                <Link
+                  to={`${
+                    role === "Admin" ? "/admin-dashboard" : "member-dashboard"
+                  }`}
                   className="flex bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
                 >
                   <svg
@@ -72,7 +91,18 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
                   <span className={`${collapsed ? "hidden" : "flex ml-4"}`}>
                     Task List
                   </span>
-                </a>
+                </Link>
+              </li>
+              <li className={`${role === "Admin" ? "block" : "hidden"}`}>
+                <Link
+                  to={`${role === "Admin" ? "/create-task" : ""}`}
+                  className="flex items-center bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
+                >
+                  <i className="bx bxs-edit text-2xl"></i>
+                  <span className={`${collapsed ? "hidden" : "flex ml-3"}`}>
+                    Create Task
+                  </span>
+                </Link>
               </li>
             </ul>
           </div>

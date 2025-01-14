@@ -230,7 +230,7 @@ const CreateTask: React.FC = () => {
               <button
                 type="submit"
                 className="px-6 py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 w-full"
-                disabled={loading} // Disable button when loading
+                disabled={loading}
               >
                 {loading ? (
                   <div className="flex justify-center items-center space-x-2">

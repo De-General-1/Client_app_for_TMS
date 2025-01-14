@@ -8,7 +8,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({}) => {
   const auth = useAuth();
-  //const location = useLocation();
   const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,21 +36,13 @@ const Header: React.FC<HeaderProps> = ({}) => {
     auth.removeUser();
   };
 
-  // Paths that require the sidebar
-  // const sidebarRoutes = [
-  //   "/admin-dashboard",
-  //   "/create-task",
-  //   "/member-dashboard",
-  // ];
-  // const isSidebarRoute = sidebarRoutes.includes(location.pathname);
-
   return (
     <header
       className={`bg-gray-800 text-white p-4 shadow-md transition-all duration-300`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Task Management System</h1>
-        <nav className="space-x-4">
+        <nav className="space-x-4 flex items-center">
           {auth.isAuthenticated ? (
             <>
               <Link to="/" className="hover:text-blue-400">

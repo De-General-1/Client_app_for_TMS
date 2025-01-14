@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
-//import Sidebar from "../components/Sidebar";
+import LoadingSpinner from "../components/LoadingSpinner"; // loading spinner component
 
 const MemberDashboard: React.FC = () => {
   const auth = useAuth();
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const fetchTasks = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://ry4hi4iasd.execute-api.eu-west-1.amazonaws.com/getAllTasks`
+        "https://ry4hi4iasd.execute-api.eu-west-1.amazonaws.com/getAllTasks"
       );
       const data = await response.json();
 
@@ -79,65 +81,70 @@ const MemberDashboard: React.FC = () => {
   }, [auth]);
 
   return (
-    <div className="relative bg-yellow-50 overflow-hidden max-h-screen">
+    <div className="flex bg-yellow-50 min-h-screen">
       {/* Main content */}
-      <main className="ml-60 pt-16 max-h-screen overflow-auto">
-        <div className="px-6 py-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-3xl p-8 mb-5">
-              <h1 className="text-3xl font-bold mb-10">Today's Plan</h1>
+      <main className="w-full p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">Member Dashboard</h1>
+        </div>
 
-              {/* Loading or Error State */}
-              {loading ? (
-                <div className="flex justify-center items-center space-x-2">
-                  <div className="w-6 h-6 border-4 border-t-transparent border-blue-600 rounded-full animate-spin"></div>
-                  <span>Loading...</span>
-                </div>
-              ) : error ? (
-                <div className="text-red-500 text-center mt-4">{error}</div>
-              ) : tasks.length === 0 ? (
-                <div className="text-gray-600 text-center mt-6">
-                  <p>No tasks assigned to you at the moment.</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {tasks.map((task) => (
-                    <div
-                      key={task.id}
-                      className="p-4 bg-white border rounded-xl text-gray-800 space-y-2"
+        {/* Loading or Error State */}
+        {loading && <LoadingSpinner />}
+        {error && <p className="text-red-500">{error}</p>}
+
+        {/* Display tasks */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+            Your Tasks
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tasks.length > 0 ? (
+              tasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="p-6 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-200 ease-in-out"
+                >
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    <button
+                      onClick={() => navigate(`/task-details/${task.id}`)}
+                      className="hover:underline"
                     >
-                      <div className="flex justify-between">
-                        <div className="text-gray-400 text-xs">
-                          {task.assigned_to}
-                        </div>
-                        <div className="text-gray-400 text-xs">
-                          {task.due_date}
-                        </div>
-                      </div>
-                      <a
-                        href="javascript:void(0)"
-                        className="font-bold hover:text-yellow-800 hover:underline"
-                      >
-                        {task.title}
-                      </a>
-                      <div className="text-sm text-gray-600">
-                        <select
-                          value={task.status}
-                          onChange={(e) =>
-                            updateTaskStatus(task.id, e.target.value)
-                          }
-                          className="ml-2 border p-2 rounded-md bg-gray-50"
-                        >
-                          <option value="Pending">Pending</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Completed">Completed</option>
-                        </select>
-                      </div>
-                    </div>
-                  ))}
+                      {task.title}
+                    </button>
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {task.description}
+                  </p>
+                  <div className="flex justify-between mt-4">
+                    <span className="text-sm text-gray-600">
+                      Status: {task.status}
+                    </span>
+                    <span className="text-sm text-gray-400">
+                      {task.due_date}
+                    </span>
+                  </div>
+
+                  {/* Task status update */}
+                  <div className="mt-4">
+                    <select
+                      value={task.status}
+                      onChange={(e) =>
+                        updateTaskStatus(task.id, e.target.value)
+                      }
+                      className="w-full border p-2 rounded-md bg-gray-50"
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
                 </div>
-              )}
-            </div>
+              ))
+            ) : (
+              <p className="text-gray-500">
+                No tasks assigned to you at the moment.
+              </p>
+            )}
           </div>
         </div>
       </main>
