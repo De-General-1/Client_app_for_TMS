@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 bg-white shadow-md transition-all duration-300 ${
+      className={`fixed z-10 inset-y-0 left-0 bg-white shadow-md transition-all duration-300 ${
         collapsed ? "w-20" : "w-60"
       } max-h-screen`}
     >

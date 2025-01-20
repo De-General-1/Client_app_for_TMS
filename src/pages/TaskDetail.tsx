@@ -85,9 +85,9 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ role }) => {
       console.log(data);
       if (response.ok) {
         console.log(data);
-        setTask(data); // Update task state with the new data
-        setIsEditing(false); // Exit edit mode
-        setShowSuccessModal(true); // Show success message
+        setTask(data);
+        setIsEditing(false);
+        setShowSuccessModal(true);
       } else {
         setError(data.body || "Failed to update task.");
       }
@@ -271,14 +271,14 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ role }) => {
           <div className="flex justify-between space-x-6 mt-6">
             {isEditing ? (
               <button
-                className="px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600"
+                className="px-6 py-3 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-700"
                 onClick={saveTaskChanges}
               >
                 Save Changes
               </button>
             ) : (
               <button
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+                className="px-6 py-3 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-600"
                 onClick={() => setIsEditing(true)}
               >
                 Edit Task
@@ -296,8 +296,13 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ role }) => {
         {role === "Team_member" && (
           <div className="flex justify-between space-x-6 mt-6">
             <button
-              className="px-6 py-3 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+              className={`px-6 py-3 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-700 focus:outline-none transition-colors duration-300 ${
+                task.status === "Completed"
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : ""
+              }`}
               onClick={() => updateTaskStatus("Completed")}
+              disabled={task.status === "Completed"}
             >
               Mark as completed
             </button>
@@ -338,8 +343,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ role }) => {
               Task Updated Successfully!
             </h3>
             <p className="mt-4 text-lg text-gray-600">
-              The task has been marked as completed, and the admin has been
-              notified.
+              The task has been updated Successfully
             </p>
             <div className="mt-4">
               <button

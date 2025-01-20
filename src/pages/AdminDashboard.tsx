@@ -105,7 +105,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ role }) => {
         {/* Display all tasks for the admin */}
         <div className="space-y-6">
           <h2 className="text-2xl font-semibold text-gray-700">All Tasks</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 z-0 motion-preset-slide-right ">
             {tasks.length > 0 ? (
               tasks.map((task) => {
                 return (
