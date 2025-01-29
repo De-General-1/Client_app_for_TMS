@@ -39,8 +39,8 @@ The application is deployed and hosted using AWS Amplify.
 
 The frontend makes use of the following API endpoints provided by the backend:
 
-- **POST /tasks**: Create a new task (Admin only).
-- **GET /tasks**: Get all tasks assigned to a user or view all tasks (Admin).
+- **POST /creatTask**: Create a new task (Admin only).
+- **GET /getAllTasks**: Get all tasks assigned to a user or view all tasks (Admin).
 - **GET /tasks/{taskId}**: Get details of a specific task.
 - **PATCH /tasks/{taskId}**: Update task status (Team Member marks task as completed).
 - **POST /users**: Create a new user (Admin only).

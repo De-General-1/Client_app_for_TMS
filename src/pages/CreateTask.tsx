@@ -12,10 +12,10 @@ const CreateTask: React.FC = () => {
   const [dueDate, setDueDate] = useState("");
   const [users, setUsers] = useState<any[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
-  const [loading, setLoading] = useState(false); // Track the loading state for task creation
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successModalVisible, setSuccessModalVisible] = useState(false); // Success modal visibility
-  const [errorModalVisible, setErrorModalVisible] = useState(false); // Error modal visibility
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const navigate = useNavigate();
 
   // Fetch users from the "Team_members" group
@@ -65,7 +65,7 @@ const CreateTask: React.FC = () => {
       status,
     };
 
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -74,19 +74,20 @@ const CreateTask: React.FC = () => {
           method: "POST",
           body: JSON.stringify(newTask),
           headers: {
+            Authorization: `Bearer ${user?.access_token}`,
             "Content-Type": "application/json",
           },
         }
       );
       if (response.ok) {
-        setSuccessModalVisible(true); // Show success modal
+        setSuccessModalVisible(true);
         setLoading(false);
       } else {
         throw new Error("Failed to create task");
       }
     } catch (error: any) {
       setError(error.message || "Error creating task.");
-      setErrorModalVisible(true); // Show error modal
+      setErrorModalVisible(true);
       setLoading(false);
     }
   };

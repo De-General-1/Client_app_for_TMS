@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-//import Sidebar from "../components/Sidebar"; // assuming Sidebar is a reusable component
-import LoadingSpinner from "../components/LoadingSpinner"; // a loading spinner component
+import LoadingSpinner from "../components/LoadingSpinner";
+import { useAuth } from "react-oidc-context";
 
 interface AdminDashboardProps {
   role: string;
@@ -13,6 +13,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ role }) => {
   const [error, setError] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
+  const auth = useAuth();
   const navigate = useNavigate();
 
   // Fetch tasks only if the user is an Admin
@@ -22,7 +23,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ role }) => {
         setLoading(true);
         try {
           const response = await fetch(
-            "https://ry4hi4iasd.execute-api.eu-west-1.amazonaws.com/getAllTasks"
+            "https://ry4hi4iasd.execute-api.eu-west-1.amazonaws.com/getAllTasks",
+            {
+              headers: {
+                Authorization: `Bearer ${auth.user?.access_token}`,
+              },
+            }
           );
           if (!response.ok) {
             throw new Error("Failed to fetch tasks");
