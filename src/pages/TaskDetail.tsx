@@ -69,6 +69,14 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ role }) => {
   const saveTaskChanges = async () => {
     if (!taskId) return;
 
+    const startDateObj = new Date(task.start_date);
+    const dueDateObj = new Date(task.due_date);
+
+    if (dueDateObj < startDateObj) {
+      setError("Due date cannot be earlier than the start date.");
+      return;
+    }
+
     try {
       const response = await fetch(
         "https://ry4hi4iasd.execute-api.eu-west-1.amazonaws.com/update_task",
@@ -82,9 +90,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ role }) => {
       );
 
       const data = await response.json();
-      console.log(data);
       if (response.ok) {
-        console.log(data);
         setTask(data);
         setIsEditing(false);
         setShowSuccessModal(true);
