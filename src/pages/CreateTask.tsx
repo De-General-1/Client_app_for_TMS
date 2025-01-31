@@ -51,8 +51,19 @@ const CreateTask: React.FC = () => {
     fetchUsers();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Convert the dates to Date objects for comparison
+    const startDateObj = new Date(startDate);
+    const dueDateObj = new Date(dueDate);
+
+    // Validate if the due date is before the start date
+    if (dueDateObj < startDateObj) {
+      setError("Due date cannot be earlier than the start date.");
+      setErrorModalVisible(true);
+      return; 
+    }
 
     // Prepare task request with user ids and emails
     const newTask = {
