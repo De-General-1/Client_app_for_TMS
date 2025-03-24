@@ -19,7 +19,7 @@ The application is deployed and hosted using AWS Amplify.
 - **Update Task Status**: Team members can mark tasks as completed once they finish them.
 - **Receive Reminders**: Team members receive task reminders one day before the task's deadline.
 
-## Frontend Structure
+## Frontend Structure::
 
 ### Technologies Used:
 
